@@ -2,6 +2,15 @@
 import express from 'express';
 import helmet from 'helmet';
 
+import sequelize from './db.js';
+
+try {
+  await sequelize.authenticate();
+  console.log('Database connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
+
 const app = express();
 app.use(express.json());
 app.use(helmet());
