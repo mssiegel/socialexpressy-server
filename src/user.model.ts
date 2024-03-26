@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './db.js';
 
-const User = sequelize.define('user', {
-  user_id: {
+const User = sequelize.define('User', {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -15,15 +15,21 @@ const User = sequelize.define('user', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  last_journal_date: {
+  last_journaled: {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  current_streak: {
+  streak: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
 });
 await User.sync();
+
+// try {
+//   const user = await User.create({ first_name: 'Moshe', last_name: 'Siegel' });
+// } catch (error) {
+//   console.error('Unable to creat user:', error);
+// }
 
 export default User;
