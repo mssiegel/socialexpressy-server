@@ -4,6 +4,7 @@ import helmet from 'helmet';
 
 import sequelize from './db.js';
 import { updateStreak } from './user.controller.js';
+import { createUser } from './user.controller.js';
 
 try {
   await sequelize.authenticate();
@@ -22,9 +23,16 @@ app.get('/', (req, res) => {
   res.send('Hello, TypeScript with Express! You rock!');
 });
 
+app.post('/users', (req, res) => {
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  createUser(firstName, lastName);
+});
+
 app.patch('/users/:userid/update-streak', (req, res) => {
   const userid = Number(req.params.userid);
-  const date: Date = req.body.date;
+  const dateParams = req.body.date;
+  const date = new Date(dateParams);
   updateStreak(userid, date);
 });
 

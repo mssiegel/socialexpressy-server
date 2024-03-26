@@ -1,10 +1,20 @@
 import User from './user.model.js';
 
+async function createUser(firstName: string, lastName?: string) {
+  try {
+    if (!firstName) throw Error('First name is required');
+    const newUser = { first_name: firstName, last_name: lastName };
+    await User.create(newUser);
+  } catch (error) {
+    console.error('Error creating user: ', error);
+  }
+}
+
 async function updateStreak(userId: number, date: Date) {
   // we get the date from the front end client so it will be the client's local time zone
   try {
     const user: any = await User.findOne({ where: { id: userId } });
-    if (!user) return console.log(`User with ID ${userId} not found.`);
+    if (!user) throw Error(`User with ID ${userId} not found.`);
 
     const daysSinceLastJournaled =
       user.last_journaled === null
@@ -24,7 +34,7 @@ async function updateStreak(userId: number, date: Date) {
 
     console.log(`Streak of ${updateStreak} was saved for user ${userId}.`);
   } catch (error) {
-    console.error('Error updating streak count:', error);
+    console.error('Error updating streak count: ', error);
   }
 }
 
@@ -41,4 +51,4 @@ function calculateDaysDiff(date1: Date, date2: Date): number {
   return differenceInMS / msPerDay;
 }
 
-export { updateStreak };
+export { createUser, updateStreak };

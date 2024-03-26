@@ -26,10 +26,4 @@ const User = sequelize.define('User', {
 });
 await User.sync();
 
-// try {
-//   const user = await User.create({ first_name: 'Moshe', last_name: 'Siegel' });
-// } catch (error) {
-//   console.error('Unable to creat user:', error);
-// }
-
 export default User;
