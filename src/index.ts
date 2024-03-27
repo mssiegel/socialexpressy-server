@@ -13,7 +13,7 @@ app.use(cors(corsOptions));
 
 app.use('/api/v1/users', userRoutes);
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 app.get('/', (req, res) => {
   res.send('Hello, TypeScript with Express! You rock!');
