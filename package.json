@@ -9,8 +9,11 @@
     "prettier": "^3.2.5",
     "sequelize": "^6.37.1"
   },
-  "name": "server",
+  "name": "social_expressy_server",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
   "main": "index.js",
   "type": "module",
   "devDependencies": {
