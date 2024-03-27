@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { createUser, updateStreak } from './user.controllers.js';
+import { createUser, getStreak, updateStreak } from './user.controllers.js';
 
 const router = express.Router();
 
@@ -12,6 +12,16 @@ router.post('/', async (req, res) => {
   const { firstName, lastName } = req.body;
   const userId = await createUser(firstName, lastName);
   res.json({ userId });
+});
+
+// @desc      Gets a user's journaling streak
+// @route     GET /api/v1/users/:userid/streak
+router.get('/:userid/streak', async (req, res) => {
+  const userid = Number(req.params.userid);
+  const dateParams = req.query.date as string;
+  const date = new Date(dateParams);
+  const streak = await getStreak(userid, date);
+  res.status(200).json({ streak });
 });
 
 // @desc      Updates a user's journaling streak

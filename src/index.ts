@@ -1,20 +1,15 @@
 // src/index.ts
 import express from 'express';
 import helmet from 'helmet';
+import cors from 'cors';
 
-import sequelize from './db.js';
+import corsOptions from './services/corsOptions.js';
 import userRoutes from './user.routes.js';
-
-try {
-  await sequelize.authenticate();
-  console.log('Database connection has been established successfully.');
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-}
 
 const app = express();
 app.use(express.json());
 app.use(helmet());
+app.use(cors(corsOptions));
 
 app.use('/api/v1/users', userRoutes);
 

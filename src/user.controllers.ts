@@ -11,6 +11,28 @@ async function createUser(firstName: string, lastName?: string) {
   }
 }
 
+async function getStreak(userId: number, date: Date) {
+  try {
+    const user: any = await User.findOne({ where: { id: userId } });
+    if (!user) throw Error(`User with ID ${userId} not found.`);
+    const daysSinceLastJournaled =
+      user.last_journaled === null
+        ? Infinity
+        : calculateDaysDiff(date, user.last_journaled);
+
+    // Calculate streak based on how many days its been since user last journaled
+    let calculatedStreak: number;
+    if (daysSinceLastJournaled === 1 || daysSinceLastJournaled === 0)
+      calculatedStreak = user.streak;
+    else calculatedStreak = 0;
+
+    console.log(`Streak of ${calculatedStreak} was found for user ${userId}.`);
+    return calculatedStreak;
+  } catch (error) {
+    console.error('Error getting streak count: ', error);
+  }
+}
+
 async function updateStreak(userId: number, date: Date) {
   // we get the date from the front end client so it will be the client's local time zone
   try {
@@ -33,7 +55,7 @@ async function updateStreak(userId: number, date: Date) {
       last_journaled: date,
     });
 
-    console.log(`Streak of ${updateStreak} was saved for user ${userId}.`);
+    console.log(`Streak of ${updatedStreak} was saved for user ${userId}.`);
     return updatedStreak;
   } catch (error) {
     console.error('Error updating streak count: ', error);
@@ -53,4 +75,4 @@ function calculateDaysDiff(date1: Date, date2: Date): number {
   return differenceInMS / msPerDay;
 }
 
-export { createUser, updateStreak };
+export { createUser, getStreak, updateStreak };
