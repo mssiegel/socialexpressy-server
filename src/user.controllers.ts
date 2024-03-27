@@ -4,7 +4,8 @@ async function createUser(firstName: string, lastName?: string) {
   try {
     if (!firstName) throw Error('First name is required');
     const newUser = { first_name: firstName, last_name: lastName };
-    await User.create(newUser);
+    const user: any = await User.create(newUser);
+    return user.id;
   } catch (error) {
     console.error('Error creating user: ', error);
   }
@@ -33,6 +34,7 @@ async function updateStreak(userId: number, date: Date) {
     });
 
     console.log(`Streak of ${updateStreak} was saved for user ${userId}.`);
+    return updatedStreak;
   } catch (error) {
     console.error('Error updating streak count: ', error);
   }

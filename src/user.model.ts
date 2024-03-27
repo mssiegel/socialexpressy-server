@@ -1,6 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './db.js';
 
+// TODO: Add TypeScript to the Models
+
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
