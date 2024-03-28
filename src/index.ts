@@ -2,9 +2,11 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import 'express-async-errors';
 
 import corsOptions from './services/corsOptions.js';
 import userRoutes from './user.routes.js';
+import { errorHandler } from './middlewares/errors.js';
 
 const app = express();
 app.use(express.json());
@@ -12,6 +14,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 
 app.use('/api/v1/users', userRoutes);
+app.use(errorHandler);
 
 const port = process.env.PORT || 4000;
 
