@@ -7,8 +7,8 @@ const router = express.Router();
 // TODO: add error handling middleware
 
 // @desc      Creates a new user
-// @route     POST /api/v1/users
-router.post('/', async (req, res) => {
+// @route     POST /api/v1/users/signup
+router.post('/signup', async (req, res) => {
   const { firstName, lastName } = req.body;
   const userId = await createUser(firstName, lastName);
   res.json({ userId });
@@ -21,7 +21,7 @@ router.get('/:userid/streak', async (req, res) => {
   const dateParams = req.query.date as string;
   const date = new Date(dateParams);
   const streak = await getStreak(userid, date);
-  res.status(200).json({ streak });
+  res.json({ streak });
 });
 
 // @desc      Updates a user's journaling streak
@@ -31,7 +31,7 @@ router.patch('/:userid/update-streak', async (req, res) => {
   const dateParams = req.body.date;
   const date = new Date(dateParams);
   const updatedStreak = await updateStreak(userid, date);
-  res.status(200).json({ streak: updatedStreak });
+  res.json({ streak: updatedStreak });
 });
 
 export default router;
