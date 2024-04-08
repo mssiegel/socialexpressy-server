@@ -1,9 +1,7 @@
 import { CustomError } from './CustomError.js';
 
-// example usage: throw new BadRequestError({ code: 400, message: 'Name is required' });
-
-export default class BadRequestError extends CustomError {
-  private static readonly _statusCode = 400;
+export default class NotFoundError extends CustomError {
+  private static readonly _statusCode = 404;
   private readonly _code: number;
   private readonly _context: { [key: string]: any };
 
@@ -14,12 +12,12 @@ export default class BadRequestError extends CustomError {
   }) {
     const { code, message } = params || {};
 
-    super(message || 'Bad request');
-    this._code = code || BadRequestError._statusCode;
+    super(message || 'Not found');
+    this._code = code || NotFoundError._statusCode;
     this._context = params?.context || {};
 
     // Only because we are extending a built in class
-    Object.setPrototypeOf(this, BadRequestError.prototype);
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 
   get errors() {

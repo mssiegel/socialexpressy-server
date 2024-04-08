@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from './db.js';
-import BadRequestError from './errors/BadRequestError.js';
+import { BadRequestError, NotFoundError } from './errors/index.js';
 
 async function createUser(req: Request, res: Response) {
   const { firstName, lastName } = req.body;
@@ -22,8 +22,7 @@ async function getStreak(req: Request, res: Response) {
   const date = new Date(dateParams);
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user)
-    throw new BadRequestError({ code: 404, message: 'User not found' });
+  if (!user) throw new NotFoundError({ code: 404, message: 'User not found' });
 
   const daysSinceLastJournaled = calculateDaysSinceLastJournaled(
     date,
@@ -45,8 +44,7 @@ async function updateStreak(req: Request, res: Response) {
   const date = new Date(dateParams);
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user)
-    throw new BadRequestError({ code: 404, message: 'User not found' });
+  if (!user) throw new NotFoundError({ code: 404, message: 'User not found' });
 
   const daysSinceLastJournaled = calculateDaysSinceLastJournaled(
     date,
