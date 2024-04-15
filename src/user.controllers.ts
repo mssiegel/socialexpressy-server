@@ -2,6 +2,10 @@ import { Request, Response } from 'express';
 import prisma from './db.js';
 import { BadRequestError, NotFoundError } from './errors/index.js';
 
+// Add validation using express-validator
+// express validator docs: https://express-validator.github.io/docs/guides/getting-started/
+// express validator tutorial: https://medium.com/@hcach90/using-express-validator-for-data-validation-in-nodejs-6946afd9d67e
+
 async function createUser(req: Request, res: Response) {
   const { firstName, lastName } = req.body;
   if (!firstName)
@@ -13,6 +17,22 @@ async function createUser(req: Request, res: Response) {
       last_name: lastName,
     },
   });
+  res.json({ userId: user.id });
+}
+
+async function loginUser(req: Request, res: Response) {
+  const { firstName, lastName } = req.body;
+  if (!firstName && !lastName)
+    throw new BadRequestError({
+      code: 400,
+      message: 'First name and last name is required',
+    });
+
+  const user = await prisma.user.findFirst({
+    where: { first_name: firstName, last_name: lastName },
+  });
+  if (!user) throw new NotFoundError({ code: 404, message: 'User not found' });
+
   res.json({ userId: user.id });
 }
 
@@ -57,7 +77,7 @@ async function updateStreak(req: Request, res: Response) {
   else if (daysSinceLastJournaled === 0) updatedStreak = user.streak;
   else updatedStreak = 1;
 
-  if (updatedStreak !== user.streak) {
+  if (daysSinceLastJournaled >= 1) {
     await prisma.user.update({
       where: { id: userId },
       data: { streak: updatedStreak, last_journaled: date },
@@ -84,4 +104,4 @@ function calculateDaysSinceLastJournaled(
   return differenceInMS / msPerDay;
 }
 
-export { createUser, getStreak, updateStreak };
+export { createUser, loginUser, getStreak, updateStreak };
