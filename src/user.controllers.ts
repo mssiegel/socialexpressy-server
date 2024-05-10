@@ -36,7 +36,7 @@ async function loginUser(req: Request, res: Response) {
   res.json({ userId: user.id });
 }
 
-async function getStreak(req: Request, res: Response) {
+async function getJournal(req: Request, res: Response) {
   const userId = Number(req.params.userid);
   const dateParams = req.query.date as string;
   const date = new Date(dateParams);
@@ -54,12 +54,17 @@ async function getStreak(req: Request, res: Response) {
     streak = user.streak;
   else streak = 0;
 
-  res.json({ streak });
+  res.json({
+    streak,
+    lastGifUsed: user.last_gif_used,
+    lastJournalDate: user.last_journaled,
+  });
 }
 
-async function updateStreak(req: Request, res: Response) {
+async function updateJournal(req: Request, res: Response) {
   // we get our dates from the front end so all comparisons are based on the client's time zone
   const userId = Number(req.params.userid);
+  const lastGifUsed = req.body.lastGifUsed;
   const dateParams = req.body.date;
   const date = new Date(dateParams);
 
@@ -77,12 +82,14 @@ async function updateStreak(req: Request, res: Response) {
   else if (daysSinceLastJournaled === 0) updatedStreak = user.streak;
   else updatedStreak = 1;
 
-  if (daysSinceLastJournaled >= 1) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { streak: updatedStreak, last_journaled: date },
-    });
-  }
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      streak: updatedStreak,
+      last_journaled: date,
+      last_gif_used: lastGifUsed,
+    },
+  });
 
   res.json({ streak: updatedStreak });
 }
@@ -104,4 +111,4 @@ function calculateDaysSinceLastJournaled(
   return differenceInMS / msPerDay;
 }
 
-export { createUser, loginUser, getStreak, updateStreak };
+export { createUser, loginUser, getJournal, updateJournal };

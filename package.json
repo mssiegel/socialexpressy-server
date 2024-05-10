@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@prisma/client": "^5.11.0",
+    "@prisma/client": "^5.13.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
@@ -28,7 +28,7 @@
     "@typescript-eslint/parser": "^7.3.1",
     "nodemon": "^3.1.0",
     "npm": "^10.5.0",
-    "prisma": "^5.11.0",
+    "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },

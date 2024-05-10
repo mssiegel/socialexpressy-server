@@ -3,8 +3,8 @@ import express from 'express';
 import {
   createUser,
   loginUser,
-  getStreak,
-  updateStreak,
+  getJournal,
+  updateJournal,
 } from './user.controllers.js';
 
 const router = express.Router();
@@ -17,12 +17,12 @@ router.post('/signup', createUser);
 // @route     POST /api/v1/users/login
 router.post('/login', loginUser);
 
-// @desc      Gets a user's journaling streak
-// @route     GET /api/v1/users/:userid/streak
-router.get('/:userid/streak', getStreak);
+// @desc      Gets a user's journal. A journal is the users streak count and their last journal entry
+// @route     GET /api/v1/users/:userid/journal
+router.get('/:userid/journal', getJournal);
 
-// @desc      Updates a user's journaling streak
-// @route     POST /api/v1/users/:userid/update-streak
-router.patch('/:userid/update-streak', updateStreak);
+// @desc      Updates a user's journal
+// @route     PATCH /api/v1/users/:userid/journal
+router.patch('/:userid/journal', updateJournal);
 
 export default router;
